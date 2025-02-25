@@ -35,10 +35,21 @@ async function openGoogleChrome() {
 
   await driver.sleep(3000);
   
+  try{
+    const success = await driver.findElement({css: '#flash'});
+    await driver.takeScreenshot().then
+      (function(image){
+        require('fs').writeFileSync('login_success.png',image,'base64');
+    });
+  } catch (e) {
+    console.error('Login failed');
+    await driver.takeScreenshot().then(
+      function(image){
+      require('fs').writeFileSync('login_failed.png', image, 'base64');
+      }
+    );
+  }
 
-  //click on the search using css selector id:  inputWrapper
-  //const searchBar = await driver.findElement({css: '#input'});
-  //await searchBar.sendKeys('selenium');
 
   try{
     const logoutButton = await driver.findElement({css: '.button.secondary.radius'});
